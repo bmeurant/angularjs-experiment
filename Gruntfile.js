@@ -20,7 +20,9 @@ module.exports = function (grunt) {
                     {expand: true, cwd: 'bower_components/jquery/', src: ['jquery.min.*'], dest: 'dist/libs/'},
                     {expand: true, cwd: 'bower_components/bootstrap/dist/css/', src: ['bootstrap.css'], dest: 'dist/libs/'},
                     {expand: true, cwd: 'bower_components/moment/', src: ['moment.js'], dest: 'dist/libs/'},
-                    {expand: true, cwd: 'bower_components/angular-route/', src: ['angular-route.js'], dest: 'dist/libs/'}
+                    {expand: true, cwd: 'bower_components/angular-route/', src: ['angular-route.js'], dest: 'dist/libs/'},
+                    {expand: true, cwd: 'bower_components/angular-resource/', src: ['angular-resource.js'], dest: 'dist/libs/'},
+                    {expand: true, cwd: 'bower_components/angular-mocks/', src: ['angular-mocks.js'], dest: 'dist/libs/'}
                 ]
             },
             static: {
@@ -47,7 +49,7 @@ module.exports = function (grunt) {
                 tasks: ['build']
             },
             templates: {
-                files: ['app/templates/**/*.hbs'],
+                files: ['app/**/*.html'],
                 tasks: ['build']
             },
             styles: {
@@ -65,8 +67,18 @@ module.exports = function (grunt) {
         },
         concat: {
             javascript: {
-                src: 'app/**/*.js',
+                src: ['app/**/*.js', 'dist/templates/**/*.js'],
                 dest: 'dist/application.js'
+            }
+        },
+        html2js: {
+            app: {
+                options: {
+                    base: 'app'
+                },
+                src: ['app/**/*.html'],
+                dest: 'dist/templates/app.js',
+                module: 'templates.app'
             }
         }
     });
@@ -77,8 +89,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-html2js');
 
-    grunt.registerTask('build', ['less:compile', 'copy', 'concat'/*, 'emberTemplates'*/]);
+    grunt.registerTask('build', ['less:compile', 'html2js', 'copy', 'concat']);
     grunt.registerTask('serve', ['connect', 'build', 'watch']);
     grunt.registerTask('default', ['serve']);
 };
