@@ -59,6 +59,7 @@ appDev.run(function($httpBackend) {
         summary: 'Sin City is the place - tough as leather and dry as tinder. Love is the fuel, and the now-infamous character Marv has the match ... not to mention a "condition." He\'s gunning after Goldie\'s killer, so it\'s time to watch this town burn!'
     }];
 
-    // returns the current list of phones
-    //$httpBackend.whenGET('/series').respond(series);
+    // returns the current list of series
+    $httpBackend.whenGET('series').respond(series);
+    $httpBackend.expectGET("series");
 });

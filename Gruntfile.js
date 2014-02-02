@@ -30,6 +30,11 @@ module.exports = function (grunt) {
                     {expand: true, cwd: 'static/', src: ['**/*.*'], dest: 'dist/static/'}
                 ]
             },
+            fixtures: {
+                files: [
+                    {expand: true, cwd: 'fixtures/', src: ['**/*.*'], dest: 'dist/fixtures/'}
+                ]
+            },
             libs: {
                 files: [
                     {expand: true, cwd: 'libs/', src: ['**/*.*'], dest: 'dist/libs/'}
@@ -58,6 +63,10 @@ module.exports = function (grunt) {
             },
             static: {
                 files: ['static/**/*.*'],
+                tasks: ['build']
+            },
+            fixtures: {
+                files: ['fixtures/**/*.json'],
                 tasks: ['build']
             },
             indexHTML: {
