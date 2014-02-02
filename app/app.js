@@ -1,1 +1,1 @@
-angular.module('app', ['series']);
+angular.module('app', ['ngRoute', 'series']);
