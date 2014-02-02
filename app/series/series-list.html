@@ -1,13 +1,13 @@
 <div class="col-xs-12 col-md-3">
     <h2>Comics series</h2>
 
-    <input type="text" value="" class="filter form-control"/>
-    <button class="sort btn btn-icon btn-default">
-        <i class="fa fa-caret-down"></i>
+    <input type="text" ng-model="query" class="filter form-control"/>
+    <button class="sort btn btn-icon btn-default" ng-click="reverse=!reverse">
+        <i class="fa" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></i>
     </button>
 
     <ul class="series-listing">
-        <li ng-repeat="seriesItem in series" class="series-item">
+        <li ng-repeat="seriesItem in series | filter:{title:query} | orderBy:'title':reverse" class="series-item">
             <a href="" title="{{seriesItem.title}}">
                 {{seriesItem.title}}
             </a>
@@ -19,5 +19,5 @@
         </li>
     </ul>
 
-    <span>Number of series: {{series.length}}</span>
+    <span>Number of series: {{(series|filter:{title:query}).length}}</span>
 </div>
