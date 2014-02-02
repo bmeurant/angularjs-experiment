@@ -1,6 +1,23 @@
-<ul>
-    <li ng-repeat="seriesItem in series">
-        {{seriesItem.title}}
-        <p>{{seriesItem.summary}}</p>
-    </li>
-</ul>
+<div class="col-xs-12 col-md-3">
+    <h2>Comics series</h2>
+
+    <input type="text" value="" class="filter form-control"/>
+    <button class="sort btn btn-icon btn-default">
+        <i class="fa fa-caret-down"></i>
+    </button>
+
+    <ul class="series-listing">
+        <li ng-repeat="seriesItem in series" class="series-item">
+            <a href="" title="{{seriesItem.title}}">
+                {{seriesItem.title}}
+            </a>
+        </li>
+        <li class="series-item">
+            <a href="" title="add series" class="add">
+            <i class="fa fa-2x fa-plus-square"></i>
+            </a>
+        </li>
+    </ul>
+
+    <span>Number of series: {{series.length}}</span>
+</div>
