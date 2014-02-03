@@ -1,33 +1,46 @@
-angular.module('series', ['resources.series'])
+angular.module('series', ['resources.series', 'resources.albums'])
 
     .config(function ($stateProvider) {
         $stateProvider
             .state('series', {
                 url: "/series",
                 templateUrl: 'series/series-list.html',
-                controller: 'seriesListViewCtrl',
+                controller: 'seriesListCtrl',
                 resolve: {
                     series: ['Series', function (Series) {
                         return Series.query();
                     }]
                 }
             })
-            .state('series.detail', {
-                url: "/{id:[0-9]{1,4}}",
-                templateUrl: "series/series-detail.html",
-                controller: 'seriesDetailViewCtrl',
+            .state('series.item', {
+                abstract: true,
+                url: '/{id:[0-9]{1,4}}',
+                templateUrl: "series/series-item.html",
+                controller: 'seriesItemCtrl',
                 resolve: {
-                    seriesItem: ['Series', '$stateParams', function (Series, $stateParams) {
-                        return Series.get({id: $stateParams.id});
+                    seriesItem: ['Series', 'Albums', '$stateParams', function (Series, Albums, $stateParams) {
+                        return Series.get({id: $stateParams.id}, function(seriesItem) {
+                            if (Array.isArray(seriesItem.albums)) {
+                                var fullAlbums = [];
+                                seriesItem.albums.forEach(function(item) {
+                                    fullAlbums.push(Albums.get({id: item}));
+                                });
+                                seriesItem.albums = fullAlbums;
+                            }
+                        });
                     }]
                 }
             })
+            .state('series.item.detail', {
+                url: "",
+                templateUrl: "series/series-detail.html"
+            })
     })
 
-    .controller('seriesListViewCtrl', ['$scope', 'series', function ($scope, series) {
+    .controller('seriesListCtrl', ['$scope', 'series', function ($scope, series) {
         $scope.series = series;
     }])
 
-    .controller('seriesDetailViewCtrl', ['$scope', 'seriesItem', function ($scope, seriesItem) {
+    .controller('seriesItemCtrl', ['$scope', 'seriesItem', function ($scope, seriesItem) {
         $scope.seriesItem = seriesItem;
     }]);

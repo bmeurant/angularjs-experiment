@@ -9,8 +9,8 @@
         <dd>{{seriesItem.illustrator}}</dd>
         <dt>Publisher</dt>
         <dd>{{seriesItem.publisher}}</dd>
-        <!--dt>Volumes</dt>
-        <dd>{{albums.length}}</dd-->
+        <dt>Volumes</dt>
+        <dd>{{seriesItem.albums.length || 0}}</dd>
     </dl>
     <p class="series-desc">
         {{seriesItem.summary}}

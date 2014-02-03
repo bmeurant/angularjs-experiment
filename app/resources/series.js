@@ -1,8 +1,5 @@
-var seriesResource = angular.module('resources.series', ['ngResource']);
+var seriesResource = angular.module('resources.series', ['ngResource', 'resources.albums']);
 
-seriesResource.factory('Series', ['$resource',
-    function($resource){
-        return $resource('series/:id', {}, {
-            query: {method:'GET', params:{id:''}, isArray:true}
-        });
-    }]);
+seriesResource.factory('Series', ['$resource', function ($resource) {
+    return $resource('series/:id', {id: '@id'});
+}]);
