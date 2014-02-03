@@ -22,7 +22,8 @@ module.exports = function (grunt) {
                     {expand: true, cwd: 'bower_components/moment/', src: ['moment.js'], dest: 'dist/libs/'},
                     {expand: true, cwd: 'bower_components/angular-route/', src: ['angular-route.js'], dest: 'dist/libs/'},
                     {expand: true, cwd: 'bower_components/angular-resource/', src: ['angular-resource.js'], dest: 'dist/libs/'},
-                    {expand: true, cwd: 'bower_components/angular-mocks/', src: ['angular-mocks.js'], dest: 'dist/libs/'}
+                    {expand: true, cwd: 'bower_components/angular-mocks/', src: ['angular-mocks.js'], dest: 'dist/libs/'},
+                    {expand: true, cwd: 'bower_components/angular-ui-router/release/', src: ['angular-iu-router.js'], dest: 'dist/libs/'},
                 ]
             },
             static: {

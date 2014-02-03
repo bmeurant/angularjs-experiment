@@ -61,5 +61,11 @@ appDev.run(function($httpBackend) {
 
     // returns the current list of series
     $httpBackend.whenGET('series').respond(series);
-    $httpBackend.expectGET("series");
+
+    var getOneRegex = /series\/([\d]+)/;
+    $httpBackend.whenGET(getOneRegex).respond(function (method, url, data) {
+        return [200, series[url.match(getOneRegex)[1] - 1], {}];
+    });
+
+    $httpBackend.whenGET(/.*/).passThrough();
 });
