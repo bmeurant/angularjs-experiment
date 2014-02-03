@@ -18,16 +18,8 @@ angular.module('series', ['resources.series', 'resources.albums'])
                 templateUrl: "series/series-item.html",
                 controller: 'seriesItemCtrl',
                 resolve: {
-                    seriesItem: ['Series', 'Albums', '$stateParams', function (Series, Albums, $stateParams) {
-                        return Series.get({id: $stateParams.id}, function(seriesItem) {
-                            if (Array.isArray(seriesItem.albums)) {
-                                var fullAlbums = [];
-                                seriesItem.albums.forEach(function(item) {
-                                    fullAlbums.push(Albums.get({id: item}));
-                                });
-                                seriesItem.albums = fullAlbums;
-                            }
-                        });
+                    seriesItem: ['Series', '$stateParams', function (Series, $stateParams) {
+                        return Series.get({id: $stateParams.id});
                     }]
                 }
             })
