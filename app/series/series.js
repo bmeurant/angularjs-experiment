@@ -27,12 +27,27 @@ angular.module('series', ['resources.series', 'resources.albums'])
                 url: "",
                 templateUrl: "series/series-detail.html"
             })
+            .state('series.item.edit', {
+                url: "/edit",
+                controller: 'seriesItemEditCtrl',
+                templateUrl: "series/series-edit.html"
+            })
     })
 
     .controller('seriesListCtrl', ['$scope', 'series', function ($scope, series) {
         $scope.series = series;
     }])
 
-    .controller('seriesItemCtrl', ['$scope', 'seriesItem', function ($scope, seriesItem) {
+    .controller('seriesItemCtrl', ['$scope', '$state', 'seriesItem', function ($scope, $state, seriesItem) {
         $scope.seriesItem = seriesItem;
+        $scope.edit = function () {
+            $state.go('series.item.edit');
+        }
+    }])
+
+    .controller('seriesItemEditCtrl', ['$scope', '$state', 'seriesItem', function ($scope, $state, seriesItem) {
+        $scope.seriesItem = seriesItem;
+        $scope.cancel = function () {
+            $state.go('series.item.detail');
+        }
     }]);
