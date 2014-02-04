@@ -102,7 +102,9 @@ appDev.run(function($httpBackend) {
     }];
 
     // returns the current list of series
-    $httpBackend.whenGET('series').respond(series);
+    $httpBackend.whenGET('series').respond(function (method, url, data) {
+        return [200, series, {}];
+    });
 
     var getOneSeriesRegex = /series\/([\d]+)/;
     $httpBackend.whenGET(getOneSeriesRegex).respond(function (method, url, data) {

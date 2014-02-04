@@ -27,26 +27,41 @@ angular.module('series', ['resources.series', 'resources.albums'])
     .factory('SeriesModel', function($q, Series){
         var Model = function(Series){
             this.resource = Series;
-            this.data = $q.defer();
+            this.deferred = $q.defer();
             this.fetch();
         };
 
         Model.prototype.fetch = function(){
             Series.query().$promise.then(function(result) {
-                this.data.resolve(result);
+                this.deferred.resolve(result);
             }.bind(this));
         };
 
         Model.prototype.all = function(){
-            return this.data.promise;
+            return this.deferred.promise;
         };
 
         Model.prototype.get = function(id){
             var itemData = $q.defer();
-            this.data.promise.then(function(data) {
+            this.deferred.promise.then(function(data) {
                 itemData.resolve(data[id - 1]);
             }.bind(this));
             return itemData.promise;
+        };
+
+        Model.prototype.rollback = function(item){
+            this.deferred.promise.then(function(data) {
+                Series.get({id:item.id}).$promise.then(function(itemData) {
+                    var newItemData = data[item.id - 1];
+                    //data[item.id - 1].title = itemData.title;
+                    for (key in itemData) {
+                        if (key[0] != '$')  {
+                            newItemData[key] = itemData[key];
+                        }
+                    }
+                    this.deferred.resolve(data);
+                }.bind(this));
+            }.bind(this));
         };
 
         return new Model(Series);
@@ -76,6 +91,7 @@ angular.module('series', ['resources.series', 'resources.albums'])
             $scope.seriesItem = seriesItem;
         });
         $scope.cancel = function () {
+            SeriesModel.rollback($scope.seriesItem);
             $state.go('series.item.detail');
         }
     }]);
