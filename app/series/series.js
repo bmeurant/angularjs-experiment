@@ -49,21 +49,6 @@ angular.module('series', ['resources.series', 'resources.albums'])
             return itemData.promise;
         };
 
-        Model.prototype.rollback = function(item){
-            this.deferred.promise.then(function(data) {
-                Series.get({id:item.id}).$promise.then(function(itemData) {
-                    var newItemData = data[item.id - 1];
-                    //data[item.id - 1].title = itemData.title;
-                    for (key in itemData) {
-                        if (key[0] != '$')  {
-                            newItemData[key] = itemData[key];
-                        }
-                    }
-                    this.deferred.resolve(data);
-                }.bind(this));
-            }.bind(this));
-        };
-
         return new Model(Series);
     })
 
@@ -86,12 +71,28 @@ angular.module('series', ['resources.series', 'resources.albums'])
         }
     }])
 
-    .controller('seriesItemEditCtrl', ['$scope', '$state', '$stateParams', 'SeriesModel', function ($scope, $state, $stateParams, SeriesModel) {
-        SeriesModel.get($stateParams.id).then( function (seriesItem) {
-            $scope.seriesItem = seriesItem;
+    .controller('seriesItemEditCtrl', ['$rootScope', '$scope', '$state', '$stateParams', 'SeriesModel', function ($rootScope, $scope, $state, $stateParams, SeriesModel) {
+        SeriesModel.get($stateParams.id).then( function (item) {
+            $scope.seriesItem = item;
+            $scope.original = angular.copy(item);
         });
+
         $scope.cancel = function () {
-            SeriesModel.rollback($scope.seriesItem);
+            if ($scope.seriesItemForm.$dirty)
+                angular.copy($scope.original, $scope.seriesItem);
             $state.go('series.item.detail');
-        }
+        };
+
+        $scope.save = function () {
+            if ($scope.seriesItemForm.$dirty)
+                angular.copy($scope.seriesItem, $scope.original);
+            $scope.seriesItemForm.$setPristine(true);
+            $state.go('series.item.detail');
+        };
+
+        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+            if ((fromState.name == 'series.item.edit') && ($scope.seriesItemForm.$dirty)) {
+                angular.copy($scope.original, $scope.seriesItem);
+            }
+        });
     }]);
