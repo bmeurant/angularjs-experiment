@@ -20,6 +20,8 @@
     </ul>
 
     <span>Number of series: {{(series|filter:{title:query}).length}}</span>
+    <button ng-click="update()">click</button>
+    <span>{{messages}}</span>
 </div>
 
 <div ui-view>
