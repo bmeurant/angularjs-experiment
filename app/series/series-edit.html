@@ -1,15 +1,15 @@
 <div class="col-xs-12 col-md-5 series-details">
-    <form name="seriesItemForm" class="form-horizontal" ng-submit="save()" novalidate>
+    <form name="seriesItemForm" class="form-horizontal" rh-submit="save()" novalidate>
     <button type="submit" class="btn btn-success btn-icon submit">
         <i class="fa fa-check"></i>
     </button>
     <button type="cancel" class="btn btn-danger btn-icon cancel" ng-click="cancel()">
     <i class="fa fa-times"></i>
     </button>
-    <div class="form-group title" ng-class="{'has-error': submitted && seriesItemForm.title.$invalid && !seriesItemForm.title.$pristine}">
+    <div class="form-group title" ng-class="{'has-error': rh.seriesItemForm.isInvalid(seriesItem.title)}">
         {{seriesItemForm.$dirty}} {{seriesItemForm.$pristine}}
         <input id="title" name="title" type="text" ng-model="seriesItem.title" class="form-control" ng-required="true" ng-minlength="3" />
-        <span class="help-block"></span>
+        <span class="help-block" ng-show="rh.seriesItemForm.isInvalid(seriesItem.title)">blah</span>
     </div>
     <img ng-src="{{seriesItem.coverUrl}}" alt="Series's first album cover" class="cover img-responsive img-thumbnail"/>
 

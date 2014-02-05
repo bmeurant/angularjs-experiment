@@ -1,4 +1,4 @@
-angular.module('series', ['resources.series', 'resources.albums'])
+angular.module('series', ['resources.series'])
 
     .config(function ($stateProvider) {
         $stateProvider
@@ -44,7 +44,9 @@ angular.module('series', ['resources.series', 'resources.albums'])
         Model.prototype.get = function(id){
             var itemData = $q.defer();
             this.deferred.promise.then(function(data) {
-                itemData.resolve(data[id - 1]);
+                itemData.resolve(data.filter(function(item) {
+                    return item.id == id;
+                })[0]);
             }.bind(this));
             return itemData.promise;
         };
@@ -84,6 +86,7 @@ angular.module('series', ['resources.series', 'resources.albums'])
         };
 
         $scope.save = function () {
+            console.log('save');
             $scope.submitted = true;
             if ($scope.seriesItemForm.$valid) {
                 if ($scope.seriesItemForm.$dirty)
