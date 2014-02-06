@@ -2,6 +2,25 @@ var seriesResource = angular.module('resources.series', ['ngResource', 'resource
 
 seriesResource.factory('Series', ['$resource', 'Albums', function ($resource, Albums) {
 
+    var validations = {
+        title: {
+            "required": true,
+            "min-length": 5
+        },
+        scriptwriter: {
+            "required": true,
+            "min-length": 5
+        },
+        illustrator: {
+            "required": true,
+            "min-length": 5
+        },
+        publisher: {
+            "required": true,
+            "min-length": 5
+        }
+    };
+
     var fillAlbums = function(seriesItem) {
         if (Array.isArray(seriesItem.albums)) {
             var fullAlbums = [];
@@ -18,6 +37,7 @@ seriesResource.factory('Series', ['$resource', 'Albums', function ($resource, Al
                 if (Array.isArray(series)) {
                     for (var index = 0; index < series.length; ++index) {
                         fillAlbums(series[index]);
+                        series[index].validations = validations;
                     }
                 }
                 return series;
@@ -26,6 +46,7 @@ seriesResource.factory('Series', ['$resource', 'Albums', function ($resource, Al
         get: {method: 'GET',
             transformResponse: function (seriesItem) {
                 fillAlbums(seriesItem);
+                seriesItem.validations = validations;
                 return seriesItem;
             }.bind(this)
         }});

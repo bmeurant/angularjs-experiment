@@ -86,14 +86,10 @@ angular.module('series', ['resources.series'])
         };
 
         $scope.save = function () {
-            console.log('save');
-            $scope.submitted = true;
-            if ($scope.seriesItemForm.$valid) {
-                if ($scope.seriesItemForm.$dirty)
-                    angular.copy($scope.seriesItem, $scope.original);
-                $scope.seriesItemForm.$setPristine(true);
-                $state.go('series.item.detail');
-            }
+            if ($scope.seriesItemForm.$dirty)
+                angular.copy($scope.seriesItem, $scope.original);
+            $scope.seriesItemForm.$setPristine(true);
+            $state.go('series.item.detail');
         };
 
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {

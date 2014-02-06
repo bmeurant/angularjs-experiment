@@ -8,7 +8,7 @@
 
     <ul class="series-listing">
         <li ng-repeat="seriesItem in series | filter:{title:query} | orderBy:'title':reverse" class="series-item" ng-model="seriesItem">
-            <a ui-sref-active="active" ui-sref="series.item.detail({id:seriesItem.id})" title="{{seriesItem.title}}">
+            <a ui-sref-active="active" ui-sref="series.item.detail(seriesItem)" title="{{seriesItem.title}}">
                 {{seriesItem.title}}
             </a>
         </li>
