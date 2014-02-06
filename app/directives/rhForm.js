@@ -39,7 +39,6 @@ angular.module('rhForm', [])
                 var rhFormController = controllers[0];
                 var formController = controllers[1];
                 rhFormController.setFormController(formController);
-                var fn = $parse(attributes.rgSubmit);
 
                 formElement.find('input').each(function (index, element) {
                     $(element).bind('keyup', function (event) {
