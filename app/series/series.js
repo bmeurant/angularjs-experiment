@@ -29,97 +29,6 @@ angular.module('series', ['resources.series', 'resources.albums'])
             })
     })
 
-    /*.factory('SeriesModel', ['$q', 'Series', 'Albums', function ($q, Series, Albums) {
-     var Model = function (Series) {
-     this.resource = Series;
-     this.deferred = $q.defer();
-     this.validations = {
-     title: {
-     "required": true,
-     "min-length": 5
-     },
-     scriptwriter: {
-     "required": true,
-     "min-length": 5
-     },
-     illustrator: {
-     "required": true,
-     "min-length": 5
-     },
-     publisher: {
-     "required": true,
-     "min-length": 5
-     }
-     };
-     this.fetch();
-     };
-
-     var fillAlbums = function (seriesItem) {
-     if (Array.isArray(seriesItem.albums)) {
-     var fullAlbums = [];
-     seriesItem.albums.forEach(function (item) {
-     fullAlbums.push(Albums.get({id: item}));
-     });
-     seriesItem.albums = fullAlbums;
-     }
-     }
-
-     Model.prototype.fetch = function () {
-     Series.query().$promise.then(function (result) {
-     this.deferred.resolve(result);
-     }.bind(this));
-     };
-
-     Model.prototype.all = function () {
-     this.deferred.promise.then(function (data) {
-     for (var index = 0; index < data.length; ++index) {
-     data[index].validations = this.validations;
-     fillAlbums(data[index]);
-     }
-     }.bind(this));
-     return this.deferred.promise;
-     };
-
-     Model.prototype.get = function (id) {
-     var itemData = $q.defer();
-     this.deferred.promise.then(function (data) {
-     itemData.resolve(data.filter(function (item) {
-     return item.id == id;
-     })[0]);
-     }.bind(this));
-     return itemData.promise;
-     };
-
-     Model.prototype.save = function (seriesItem) {
-     var itemData = $q.defer();
-     Series.update({id: seriesItem.id}, seriesItem).$promise.then(function (updated) {
-     this.deferred.promise.then(function (data) {
-     var obj = data.filter(function (item) {
-     return item.id == updated.id;
-     })[0]
-     angular.copy(updated, obj);
-     obj.validations = this.validations;
-     fillAlbums(obj);
-     itemData.resolve(updated);
-     }.bind(this));
-     }.bind(this));
-     return itemData.promise;
-     };
-
-     Model.prototype.new = function () {
-     var newSeries = {
-     validations: this.validations,
-     coverUrl: '/static/images/series/covers/default.jpg'
-     };
-     this.deferred.promise.then(function (data) {
-     data.push(newSeries);
-     }.bind(this));
-     return newSeries;
-     };
-
-     return new Model(Series);
-     }])*/
-
     .factory('SeriesModel', ['$q', 'Series', 'Albums', function ($q, Series, Albums) {
         var Model = function (Series) {
             this.resource = Series;
@@ -170,11 +79,7 @@ angular.module('series', ['resources.series', 'resources.albums'])
         };
 
         Model.prototype.all = function () {
-            if (this.series) {
-                console.log('return cached data');
-            }
-            else {
-                console.log('get data');
+            if (!this.series) {
                 this.fetch();
             }
             return this.series;

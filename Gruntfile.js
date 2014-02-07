@@ -20,9 +20,11 @@ module.exports = function (grunt) {
                     {expand: true, cwd: 'bower_components/jquery/', src: ['jquery.js*'], dest: 'dist/libs/'},
                     {expand: true, cwd: 'bower_components/bootstrap/dist/css/', src: ['bootstrap.css'], dest: 'dist/libs/'},
                     {expand: true, cwd: 'bower_components/moment/', src: ['moment.js'], dest: 'dist/libs/'},
+                    {expand: true, cwd: 'bower_components/moment/lang', src: ['fr.js'], dest: 'dist/libs/lang'},
                     {expand: true, cwd: 'bower_components/angular-resource/', src: ['angular-resource.js'], dest: 'dist/libs/'},
                     {expand: true, cwd: 'bower_components/angular-mocks/', src: ['angular-mocks.js'], dest: 'dist/libs/'},
                     {expand: true, cwd: 'bower_components/angular-ui-router/release/', src: ['angular-ui-router.js'], dest: 'dist/libs/'},
+                    {expand: true, cwd: 'bower_components/angular-translate/', src: ['angular-translate.js'], dest: 'dist/libs/'}
                 ]
             },
             static: {
