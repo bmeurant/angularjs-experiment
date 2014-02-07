@@ -1,6 +1,13 @@
-angular.module('app', ['ui.router', 'ngResource', 'templates.app', 'series', 'rhForm', 'validator', 'rhMoment']);
+var app = angular.module('app', ['ui.router', 'ngResource', 'templates.app', 'series', 'rhForm', 'validator', 'rhMoment', 'pascalprecht.translate', 'labels']);
 
-angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
+app.config(function ($stateProvider, $urlRouterProvider) {
     // For any unmatched url, redirect to /series
     $urlRouterProvider.otherwise("/series");
+});
+
+app.controller('appCtrl', function ($scope, $translate) {
+    $scope.changeLanguage = function (key) {
+        $translate.uses(key);
+        moment.lang(key);
+    }
 });

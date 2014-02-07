@@ -1,5 +1,5 @@
 <div class="col-xs-12 col-md-3">
-    <h2>Comics series</h2>
+    <h2> {{'series.title' | translate}} </h2>
 
     <input type="text" ng-model="query" class="filter form-control"/>
     <button class="sort btn btn-icon btn-default" ng-click="reverse=!reverse">
@@ -19,7 +19,7 @@
         </li>
     </ul>
 
-    <span>Number of series: {{(series|filter:{title:query}).length}}</span>
+    <span>{{'series.number' | translate}} {{(series|filter:{title:query}).length}}</span>
 </div>
 
 <div ui-view>
