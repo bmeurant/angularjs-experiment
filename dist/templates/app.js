@@ -7,13 +7,13 @@ angular.module("series/series-detail.html", []).run(["$templateCache", function(
     "    <h3>{{seriesItem.title}}</h3>\n" +
     "    <img ng-src=\"{{seriesItem.coverUrl}}\" alt=\"Series's first album cover\" class=\"cover img-responsive img-thumbnail\"/>\n" +
     "    <dl class=\"series-desc dl-horizontal\">\n" +
-    "        <dt>Scriptwriter</dt>\n" +
+    "        <dt>{{'seriesItem.scriptwriter' | translate}}</dt>\n" +
     "        <dd>{{seriesItem.scriptwriter}} </dd>\n" +
-    "        <dt>Illustrator</dt>\n" +
+    "        <dt>{{'seriesItem.illustrator' | translate}}</dt>\n" +
     "        <dd>{{seriesItem.illustrator}}</dd>\n" +
-    "        <dt>Publisher</dt>\n" +
+    "        <dt>{{'seriesItem.publisher' | translate}}</dt>\n" +
     "        <dd>{{seriesItem.publisher}}</dd>\n" +
-    "        <dt>Volumes</dt>\n" +
+    "        <dt>{{'seriesItem.volumes' | translate}}</dt>\n" +
     "        <dd>{{seriesItem.albums.length || 0}}</dd>\n" +
     "    </dl>\n" +
     "    <p class=\"series-desc\">\n" +
@@ -40,28 +40,28 @@ angular.module("series/series-edit.html", []).run(["$templateCache", function($t
     "\n" +
     "    <div class=\"series-desc\">\n" +
     "        <div class=\"form-group\">\n" +
-    "            <label for=\"scriptwriter\" class=\"col-sm-3 control-label\">Scriptwriter</label>\n" +
+    "            <label for=\"scriptwriter\" class=\"col-sm-3 control-label\">{{'seriesItem.scriptwriter' | translate}}</label>\n" +
     "            <div class=\"col-sm-9\">\n" +
     "                <input id=\"scriptwriter\" name=\"scriptwriter\" type=\"text\" ng-model=\"seriesItem.scriptwriter\" class=\"form-control\"/>\n" +
     "                <span class=\"help-block\"></span>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"form-group\">\n" +
-    "            <label for=\"illustrator\" class=\"col-sm-3 control-label\">Illustrator</label>\n" +
+    "            <label for=\"illustrator\" class=\"col-sm-3 control-label\">{{'seriesItem.illustrator' | translate}}</label>\n" +
     "            <div class=\"col-sm-9\">\n" +
     "                <input id=\"illustrator\" name=\"illustrator\" type=\"text\" ng-model=\"seriesItem.illustrator\" class=\"form-control\"/>\n" +
     "                <span class=\"help-block\"></span>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"form-group\">\n" +
-    "            <label for=\"publisher\" class=\"col-sm-3 control-label\">Publisher</label>\n" +
+    "            <label for=\"publisher\" class=\"col-sm-3 control-label\">{{'seriesItem.publisher' | translate}}</label>\n" +
     "            <div class=\"col-sm-9\">\n" +
     "                <input id=\"publisher\" name=\"publisher\" type=\"text\" ng-model=\"seriesItem.publisher\" class=\"form-control\"/>\n" +
     "                <span class=\"help-block\"></span>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"form-group\">\n" +
-    "            <label for=\"albums\" class=\"col-sm-3 control-label\">Volumes</label>\n" +
+    "            <label for=\"albums\" class=\"col-sm-3 control-label\">{{'seriesItem.volumes' | translate}}</label>\n" +
     "                <span class=\"col-sm-9\">\n" +
     "                    <input id=\"albums\" type=\"text\" ng-model=\"seriesItem.albums.length\" class=\"form-control\" disabled=\"disabled\"/>\n" +
     "                </span>\n" +
@@ -89,9 +89,9 @@ angular.module("series/series-item.html", []).run(["$templateCache", function($t
     "            <div class=\"col-xs-10\">\n" +
     "                <h4>{{album.title}}</h4>\n" +
     "                <dl class=\"album-desc dl-horizontal\">\n" +
-    "                    <dt>volume</dt>\n" +
+    "                    <dt>{{'album.volume' | translate}}</dt>\n" +
     "                    <dd>{{album.number}}</dd>\n" +
-    "                    <dt>date</dt>\n" +
+    "                    <dt>{{'album.date' | translate}}</dt>\n" +
     "                    <dd>{{album.publicationDate | rhMoment: 'MMMM YYYY'}}</dd>\n" +
     "                </dl>\n" +
     "            </div>\n" +
@@ -103,7 +103,7 @@ angular.module("series/series-item.html", []).run(["$templateCache", function($t
 angular.module("series/series-list.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("series/series-list.html",
     "<div class=\"col-xs-12 col-md-3\">\n" +
-    "    <h2>Comics series</h2>\n" +
+    "    <h2> {{'series.title' | translate}} </h2>\n" +
     "\n" +
     "    <input type=\"text\" ng-model=\"query\" class=\"filter form-control\"/>\n" +
     "    <button class=\"sort btn btn-icon btn-default\" ng-click=\"reverse=!reverse\">\n" +
@@ -123,7 +123,7 @@ angular.module("series/series-list.html", []).run(["$templateCache", function($t
     "        </li>\n" +
     "    </ul>\n" +
     "\n" +
-    "    <span>Number of series: {{(series|filter:{title:query}).length}}</span>\n" +
+    "    <span>{{'series.number' | translate}} {{(series|filter:{title:query}).length}}</span>\n" +
     "</div>\n" +
     "\n" +
     "<div ui-view>\n" +

@@ -1,8 +1,15 @@
-angular.module('app', ['ui.router', 'ngResource', 'templates.app', 'series', 'rhForm', 'validator', 'rhMoment']);
+var app = angular.module('app', ['ui.router', 'ngResource', 'templates.app', 'series', 'rhForm', 'validator', 'rhMoment', 'pascalprecht.translate', 'labels']);
 
-angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
+app.config(function ($stateProvider, $urlRouterProvider) {
     // For any unmatched url, redirect to /series
     $urlRouterProvider.otherwise("/series");
+});
+
+app.controller('appCtrl', function ($scope, $translate) {
+    $scope.changeLanguage = function (key) {
+        $translate.uses(key);
+        moment.lang(key);
+    }
 });
 
 var validator = angular.module('validator', []);
@@ -278,6 +285,37 @@ angular.module('rhMoment', [])
         };
     });
 
+angular.module('labels', [])
+    .config(['$translateProvider', function ($translateProvider) {
+        $translateProvider.translations('en', {
+            'app.title': 'Comic Books Library',
+            'sources.view': 'View sources on github',
+            'series.title': 'Comics series',
+            'series.number': 'Number of series:',
+            'album.volume': 'volume',
+            'album.date': 'date',
+            'seriesItem.scriptwriter': 'Scriptwriter',
+            'seriesItem.illustrator': 'Illustrator',
+            'seriesItem.publisher': 'Publisher',
+            'seriesItem.volumes': 'Volumes'
+        });
+
+        $translateProvider.translations('fr', {
+            'app.title': 'Bibliothèque de bandes dessinées',
+            'sources.view': 'Voir les sources sur github',
+            'series.title': 'Séries',
+            'series.number': 'Nombre de séries:',
+            'album.volume': 'tome',
+            'album.date': 'date',
+            'seriesItem.scriptwriter': 'Scénariste',
+            'seriesItem.illustrator': 'Dessinateur',
+            'seriesItem.publisher': 'Editeur',
+            'seriesItem.volumes': 'Tomes'
+        });
+
+        $translateProvider.preferredLanguage('en');
+        moment.lang('en');
+    }]);
 var seriesResource = angular.module('resources.albums', ['ngResource']);
 
 seriesResource.factory('Albums', ['$resource', function ($resource) {
@@ -327,97 +365,6 @@ angular.module('series', ['resources.series', 'resources.albums'])
                 templateUrl: "series/series-edit.html"
             })
     })
-
-    /*.factory('SeriesModel', ['$q', 'Series', 'Albums', function ($q, Series, Albums) {
-     var Model = function (Series) {
-     this.resource = Series;
-     this.deferred = $q.defer();
-     this.validations = {
-     title: {
-     "required": true,
-     "min-length": 5
-     },
-     scriptwriter: {
-     "required": true,
-     "min-length": 5
-     },
-     illustrator: {
-     "required": true,
-     "min-length": 5
-     },
-     publisher: {
-     "required": true,
-     "min-length": 5
-     }
-     };
-     this.fetch();
-     };
-
-     var fillAlbums = function (seriesItem) {
-     if (Array.isArray(seriesItem.albums)) {
-     var fullAlbums = [];
-     seriesItem.albums.forEach(function (item) {
-     fullAlbums.push(Albums.get({id: item}));
-     });
-     seriesItem.albums = fullAlbums;
-     }
-     }
-
-     Model.prototype.fetch = function () {
-     Series.query().$promise.then(function (result) {
-     this.deferred.resolve(result);
-     }.bind(this));
-     };
-
-     Model.prototype.all = function () {
-     this.deferred.promise.then(function (data) {
-     for (var index = 0; index < data.length; ++index) {
-     data[index].validations = this.validations;
-     fillAlbums(data[index]);
-     }
-     }.bind(this));
-     return this.deferred.promise;
-     };
-
-     Model.prototype.get = function (id) {
-     var itemData = $q.defer();
-     this.deferred.promise.then(function (data) {
-     itemData.resolve(data.filter(function (item) {
-     return item.id == id;
-     })[0]);
-     }.bind(this));
-     return itemData.promise;
-     };
-
-     Model.prototype.save = function (seriesItem) {
-     var itemData = $q.defer();
-     Series.update({id: seriesItem.id}, seriesItem).$promise.then(function (updated) {
-     this.deferred.promise.then(function (data) {
-     var obj = data.filter(function (item) {
-     return item.id == updated.id;
-     })[0]
-     angular.copy(updated, obj);
-     obj.validations = this.validations;
-     fillAlbums(obj);
-     itemData.resolve(updated);
-     }.bind(this));
-     }.bind(this));
-     return itemData.promise;
-     };
-
-     Model.prototype.new = function () {
-     var newSeries = {
-     validations: this.validations,
-     coverUrl: '/static/images/series/covers/default.jpg'
-     };
-     this.deferred.promise.then(function (data) {
-     data.push(newSeries);
-     }.bind(this));
-     return newSeries;
-     };
-
-     return new Model(Series);
-     }])*/
 
     .factory('SeriesModel', ['$q', 'Series', 'Albums', function ($q, Series, Albums) {
         var Model = function (Series) {
@@ -469,11 +416,7 @@ angular.module('series', ['resources.series', 'resources.albums'])
         };
 
         Model.prototype.all = function () {
-            if (this.series) {
-                console.log('return cached data');
-            }
-            else {
-                console.log('get data');
+            if (!this.series) {
                 this.fetch();
             }
             return this.series;
@@ -594,13 +537,13 @@ angular.module("series/series-detail.html", []).run(["$templateCache", function(
     "    <h3>{{seriesItem.title}}</h3>\n" +
     "    <img ng-src=\"{{seriesItem.coverUrl}}\" alt=\"Series's first album cover\" class=\"cover img-responsive img-thumbnail\"/>\n" +
     "    <dl class=\"series-desc dl-horizontal\">\n" +
-    "        <dt>Scriptwriter</dt>\n" +
+    "        <dt>{{'seriesItem.scriptwriter' | translate}}</dt>\n" +
     "        <dd>{{seriesItem.scriptwriter}} </dd>\n" +
-    "        <dt>Illustrator</dt>\n" +
+    "        <dt>{{'seriesItem.illustrator' | translate}}</dt>\n" +
     "        <dd>{{seriesItem.illustrator}}</dd>\n" +
-    "        <dt>Publisher</dt>\n" +
+    "        <dt>{{'seriesItem.publisher' | translate}}</dt>\n" +
     "        <dd>{{seriesItem.publisher}}</dd>\n" +
-    "        <dt>Volumes</dt>\n" +
+    "        <dt>{{'seriesItem.volumes' | translate}}</dt>\n" +
     "        <dd>{{seriesItem.albums.length || 0}}</dd>\n" +
     "    </dl>\n" +
     "    <p class=\"series-desc\">\n" +
@@ -627,28 +570,28 @@ angular.module("series/series-edit.html", []).run(["$templateCache", function($t
     "\n" +
     "    <div class=\"series-desc\">\n" +
     "        <div class=\"form-group\">\n" +
-    "            <label for=\"scriptwriter\" class=\"col-sm-3 control-label\">Scriptwriter</label>\n" +
+    "            <label for=\"scriptwriter\" class=\"col-sm-3 control-label\">{{'seriesItem.scriptwriter' | translate}}</label>\n" +
     "            <div class=\"col-sm-9\">\n" +
     "                <input id=\"scriptwriter\" name=\"scriptwriter\" type=\"text\" ng-model=\"seriesItem.scriptwriter\" class=\"form-control\"/>\n" +
     "                <span class=\"help-block\"></span>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"form-group\">\n" +
-    "            <label for=\"illustrator\" class=\"col-sm-3 control-label\">Illustrator</label>\n" +
+    "            <label for=\"illustrator\" class=\"col-sm-3 control-label\">{{'seriesItem.illustrator' | translate}}</label>\n" +
     "            <div class=\"col-sm-9\">\n" +
     "                <input id=\"illustrator\" name=\"illustrator\" type=\"text\" ng-model=\"seriesItem.illustrator\" class=\"form-control\"/>\n" +
     "                <span class=\"help-block\"></span>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"form-group\">\n" +
-    "            <label for=\"publisher\" class=\"col-sm-3 control-label\">Publisher</label>\n" +
+    "            <label for=\"publisher\" class=\"col-sm-3 control-label\">{{'seriesItem.publisher' | translate}}</label>\n" +
     "            <div class=\"col-sm-9\">\n" +
     "                <input id=\"publisher\" name=\"publisher\" type=\"text\" ng-model=\"seriesItem.publisher\" class=\"form-control\"/>\n" +
     "                <span class=\"help-block\"></span>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"form-group\">\n" +
-    "            <label for=\"albums\" class=\"col-sm-3 control-label\">Volumes</label>\n" +
+    "            <label for=\"albums\" class=\"col-sm-3 control-label\">{{'seriesItem.volumes' | translate}}</label>\n" +
     "                <span class=\"col-sm-9\">\n" +
     "                    <input id=\"albums\" type=\"text\" ng-model=\"seriesItem.albums.length\" class=\"form-control\" disabled=\"disabled\"/>\n" +
     "                </span>\n" +
@@ -676,9 +619,9 @@ angular.module("series/series-item.html", []).run(["$templateCache", function($t
     "            <div class=\"col-xs-10\">\n" +
     "                <h4>{{album.title}}</h4>\n" +
     "                <dl class=\"album-desc dl-horizontal\">\n" +
-    "                    <dt>volume</dt>\n" +
+    "                    <dt>{{'album.volume' | translate}}</dt>\n" +
     "                    <dd>{{album.number}}</dd>\n" +
-    "                    <dt>date</dt>\n" +
+    "                    <dt>{{'album.date' | translate}}</dt>\n" +
     "                    <dd>{{album.publicationDate | rhMoment: 'MMMM YYYY'}}</dd>\n" +
     "                </dl>\n" +
     "            </div>\n" +
@@ -690,7 +633,7 @@ angular.module("series/series-item.html", []).run(["$templateCache", function($t
 angular.module("series/series-list.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("series/series-list.html",
     "<div class=\"col-xs-12 col-md-3\">\n" +
-    "    <h2>Comics series</h2>\n" +
+    "    <h2> {{'series.title' | translate}} </h2>\n" +
     "\n" +
     "    <input type=\"text\" ng-model=\"query\" class=\"filter form-control\"/>\n" +
     "    <button class=\"sort btn btn-icon btn-default\" ng-click=\"reverse=!reverse\">\n" +
@@ -710,7 +653,7 @@ angular.module("series/series-list.html", []).run(["$templateCache", function($t
     "        </li>\n" +
     "    </ul>\n" +
     "\n" +
-    "    <span>Number of series: {{(series|filter:{title:query}).length}}</span>\n" +
+    "    <span>{{'series.number' | translate}} {{(series|filter:{title:query}).length}}</span>\n" +
     "</div>\n" +
     "\n" +
     "<div ui-view>\n" +
