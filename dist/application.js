@@ -51,7 +51,7 @@ validator.service('validator', function(){
 });
 var appDev = angular.module('appDev', ['app', 'ngMockE2E']);
 appDev.run(function($httpBackend) {
-    series = [{
+    var series = [{
         id: 1,
         title: 'BlackSad',
         scriptwriter: 'Juan Diaz Canales',
@@ -185,7 +185,7 @@ appDev.run(function($httpBackend) {
 
     $httpBackend.whenGET(/.*/).passThrough();
 });
-
+    
 angular.module('rhForm', [])
     .directive('rhForm', ['$parse', function ($parse) {
         return {
@@ -524,6 +524,15 @@ angular.module('series', ['resources.series', 'resources.albums'])
             return newSeries;
         };
 
+        Model.prototype.flush = function () {
+            this.series.$promise.then(function (series) {
+                for (var index = 0; index < series.length; ++index) {
+                    if (series[index].id == undefined)
+                        series.splice(index, 1);
+                }
+            }.bind(this));
+        };
+
         return new Model(Series);
     }])
 
@@ -556,6 +565,8 @@ angular.module('series', ['resources.series', 'resources.albums'])
         $scope.cancel = function () {
             if ($scope.seriesItemForm.$dirty)
                 angular.copy($scope.original, $scope.seriesItem);
+            if (!$scope.seriesItem.id)
+                SeriesModel.flush();
             $state.go('series.item.detail');
         };
 
