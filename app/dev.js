@@ -1,6 +1,6 @@
 var appDev = angular.module('appDev', ['app', 'ngMockE2E']);
 appDev.run(function($httpBackend) {
-    series = [{
+    var series = [{
         id: 1,
         title: 'BlackSad',
         scriptwriter: 'Juan Diaz Canales',
@@ -134,3 +134,4 @@ appDev.run(function($httpBackend) {
 
     $httpBackend.whenGET(/.*/).passThrough();
 });
+    
