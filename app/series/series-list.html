@@ -13,15 +13,13 @@
             </a>
         </li>
         <li class="series-item">
-            <a href="" title="add series" class="add">
+            <a href="" title="add series" class="add" ui-sref="series.create">
             <i class="fa fa-2x fa-plus-square"></i>
             </a>
         </li>
     </ul>
 
     <span>Number of series: {{(series|filter:{title:query}).length}}</span>
-    <button ng-click="update()">click</button>
-    <span>{{messages}}</span>
 </div>
 
 <div ui-view>

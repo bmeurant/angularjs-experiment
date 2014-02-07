@@ -106,17 +106,30 @@ appDev.run(function($httpBackend) {
         return [200, series, {}];
     });
 
-    var getOneSeriesRegex = /series\/([\d]+)/;
-    $httpBackend.whenGET(getOneSeriesRegex).respond(function (method, url, data) {
-        return [200, series[url.match(getOneSeriesRegex)[1] - 1], {}];
+    var oneSeriesRegex = /series\/([\d]+)/;
+    $httpBackend.whenGET(oneSeriesRegex).respond(function (method, url, data) {
+        return [200, series[url.match(oneSeriesRegex)[1] - 1], {}];
+    });
+
+    $httpBackend.whenPUT(oneSeriesRegex).respond(function (method, url, data) {
+        angular.copy($.parseJSON(data), series[url.match(oneSeriesRegex)[1] - 1]);
+        return [200, series[url.match(oneSeriesRegex)[1] - 1], {}];
+    });
+
+    $httpBackend.whenPOST('series').respond(function (method, url, data) {
+        var newSeries = {};
+        angular.copy($.parseJSON(data), newSeries);
+        newSeries.id = series.length + 1;
+        series.push(newSeries);
+        return [200, newSeries, {}];
     });
 
     // returns the current list of albums
     $httpBackend.whenGET('albums').respond(albums);
 
-    var getOneAlbumsRegex = /albums\/([\d]+)/;
-    $httpBackend.whenGET(getOneAlbumsRegex).respond(function (method, url, data) {
-        return [200, albums[url.match(getOneAlbumsRegex)[1] - 1], {}];
+    var oneAlbumRegex = /albums\/([\d]+)/;
+    $httpBackend.whenGET(oneAlbumRegex).respond(function (method, url, data) {
+        return [200, albums[url.match(oneAlbumRegex)[1] - 1], {}];
     });
 
     $httpBackend.whenGET(/.*/).passThrough();

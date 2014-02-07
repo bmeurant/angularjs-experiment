@@ -15,11 +15,13 @@ angular.module('rhForm', [])
                 }
 
                 this.validate = function (property, value) {
-                    var constraints = $scope.model.validations[property];
-                    for (var constraint in constraints) {
-                        var valid = validator.validateOne(constraint, constraints[constraint], value);
-                        this.formController[property].$setValidity(constraint, valid);
-                        if (!valid) break;
+                    if ($scope.model) {
+                        var constraints = $scope.model.validations[property];
+                        for (var constraint in constraints) {
+                            var valid = validator.validateOne(constraint, constraints[constraint], value);
+                            this.formController[property].$setValidity(constraint, valid);
+                            if (!valid) break;
+                        }
                     }
                 }
 
@@ -41,6 +43,9 @@ angular.module('rhForm', [])
                 rhFormController.setFormController(formController);
 
                 formElement.find('input').each(function (index, element) {
+                    scope.$watch('seriesItem', function () {
+                        rhFormController.validate(element.name, element.value);
+                    })
                     $(element).bind('keyup', function (event) {
                         rhFormController.validate(event.target.name, event.target.value);
                     });

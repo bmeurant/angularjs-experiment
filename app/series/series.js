@@ -1,4 +1,4 @@
-angular.module('series', ['resources.series'])
+angular.module('series', ['resources.series', 'resources.albums'])
 
     .config(function ($stateProvider) {
         $stateProvider
@@ -22,62 +22,237 @@ angular.module('series', ['resources.series'])
                 controller: 'seriesItemEditCtrl',
                 templateUrl: "series/series-edit.html"
             })
+            .state('series.create', {
+                url: "/create",
+                controller: 'seriesItemEditCtrl',
+                templateUrl: "series/series-edit.html"
+            })
     })
 
-    .factory('SeriesModel', function($q, Series){
-        var Model = function(Series){
+    /*.factory('SeriesModel', ['$q', 'Series', 'Albums', function ($q, Series, Albums) {
+     var Model = function (Series) {
+     this.resource = Series;
+     this.deferred = $q.defer();
+     this.validations = {
+     title: {
+     "required": true,
+     "min-length": 5
+     },
+     scriptwriter: {
+     "required": true,
+     "min-length": 5
+     },
+     illustrator: {
+     "required": true,
+     "min-length": 5
+     },
+     publisher: {
+     "required": true,
+     "min-length": 5
+     }
+     };
+     this.fetch();
+     };
+
+     var fillAlbums = function (seriesItem) {
+     if (Array.isArray(seriesItem.albums)) {
+     var fullAlbums = [];
+     seriesItem.albums.forEach(function (item) {
+     fullAlbums.push(Albums.get({id: item}));
+     });
+     seriesItem.albums = fullAlbums;
+     }
+     }
+
+     Model.prototype.fetch = function () {
+     Series.query().$promise.then(function (result) {
+     this.deferred.resolve(result);
+     }.bind(this));
+     };
+
+     Model.prototype.all = function () {
+     this.deferred.promise.then(function (data) {
+     for (var index = 0; index < data.length; ++index) {
+     data[index].validations = this.validations;
+     fillAlbums(data[index]);
+     }
+     }.bind(this));
+     return this.deferred.promise;
+     };
+
+     Model.prototype.get = function (id) {
+     var itemData = $q.defer();
+     this.deferred.promise.then(function (data) {
+     itemData.resolve(data.filter(function (item) {
+     return item.id == id;
+     })[0]);
+     }.bind(this));
+     return itemData.promise;
+     };
+
+     Model.prototype.save = function (seriesItem) {
+     var itemData = $q.defer();
+     Series.update({id: seriesItem.id}, seriesItem).$promise.then(function (updated) {
+     this.deferred.promise.then(function (data) {
+     var obj = data.filter(function (item) {
+     return item.id == updated.id;
+     })[0]
+     angular.copy(updated, obj);
+     obj.validations = this.validations;
+     fillAlbums(obj);
+     itemData.resolve(updated);
+     }.bind(this));
+     }.bind(this));
+     return itemData.promise;
+     };
+
+     Model.prototype.new = function () {
+     var newSeries = {
+     validations: this.validations,
+     coverUrl: '/static/images/series/covers/default.jpg'
+     };
+     this.deferred.promise.then(function (data) {
+     data.push(newSeries);
+     }.bind(this));
+     return newSeries;
+     };
+
+     return new Model(Series);
+     }])*/
+
+    .factory('SeriesModel', ['$q', 'Series', 'Albums', function ($q, Series, Albums) {
+        var Model = function (Series) {
             this.resource = Series;
-            this.deferred = $q.defer();
+            this.validations = {
+                title: {
+                    "required": true,
+                    "min-length": 5
+                },
+                scriptwriter: {
+                    "required": true,
+                    "min-length": 5
+                },
+                illustrator: {
+                    "required": true,
+                    "min-length": 5
+                },
+                publisher: {
+                    "required": true,
+                    "min-length": 5
+                }
+            };
             this.fetch();
         };
 
-        Model.prototype.fetch = function(){
-            Series.query().$promise.then(function(result) {
-                this.deferred.resolve(result);
+        var fillAlbums = function (seriesItem) {
+            if (Array.isArray(seriesItem.albums)) {
+                var fullAlbums = [];
+                seriesItem.albums.forEach(function (item) {
+                    fullAlbums.push(Albums.get({id: item}));
+                });
+                seriesItem.albums = fullAlbums;
+            }
+        }
+
+        var getById = function (series, id) {
+            return series.filter(function (item) {
+                return item.id == id;
+            })[0];
+        }
+
+        Model.prototype.fetch = function () {
+            this.series = this.resource.query(function (series) {
+                for (var index = 0; index < series.length; ++index) {
+                    series[index].validations = this.validations;
+                    fillAlbums(series[index]);
+                }
             }.bind(this));
         };
 
-        Model.prototype.all = function(){
-            return this.deferred.promise;
+        Model.prototype.all = function () {
+            if (this.series) {
+                console.log('return cached data');
+            }
+            else {
+                console.log('get data');
+                this.fetch();
+            }
+            return this.series;
         };
 
-        Model.prototype.get = function(id){
+        Model.prototype.get = function (id) {
+            if (!this.series) {
+                this.fetch();
+            }
             var itemData = $q.defer();
-            this.deferred.promise.then(function(data) {
-                itemData.resolve(data.filter(function(item) {
-                    return item.id == id;
-                })[0]);
-            }.bind(this));
+            this.series.$promise.then(function (series) {
+                itemData.resolve(getById(series, id));
+            });
             return itemData.promise;
         };
 
+        Model.prototype.save = function (seriesItem) {
+            var itemData = $q.defer();
+            if (seriesItem.id) {
+                Series.update({id: seriesItem.id}, seriesItem).$promise.then(function (updated) {
+                    this.series.$promise.then(function (series) {
+                        var obj = getById(series, seriesItem.id);
+                        angular.copy(updated, obj);
+                        itemData.resolve(obj);
+                    }.bind(this));
+                }.bind(this));
+            } else {
+                Series.save({}, seriesItem).$promise.then(function (updated) {
+                    this.series.$promise.then(function (series) {
+                        var obj = getById(series, seriesItem.id);
+                        angular.copy(updated, obj);
+                        itemData.resolve(obj);
+                    }.bind(this));
+                }.bind(this));
+            }
+
+            return itemData.promise;
+        };
+
+        Model.prototype.new = function () {
+            var newSeries = {
+                validations: this.validations,
+                coverUrl: '/static/images/series/covers/default.jpg'
+            };
+            this.series.$promise.then(function (data) {
+                data.push(newSeries);
+            }.bind(this));
+            return newSeries;
+        };
+
         return new Model(Series);
-    })
+    }])
 
     .controller('seriesListCtrl', function ($scope, SeriesModel) {
-        SeriesModel.all().then( function (series) {
-            $scope.series = series;
-        });
-
-        $scope.fetch = function(){
-            SeriesModel.fetch();
-        };
+        $scope.series = SeriesModel.all();
     })
 
     .controller('seriesItemCtrl', ['$scope', '$state', '$stateParams', 'SeriesModel', function ($scope, $state, $stateParams, SeriesModel) {
-        SeriesModel.get($stateParams.id).then( function (seriesItem) {
-            $scope.seriesItem = seriesItem;
+        SeriesModel.get($stateParams.id).then(function (item) {
+            $scope.seriesItem = item;
         });
+
         $scope.edit = function () {
             $state.go('series.item.edit');
         }
     }])
 
     .controller('seriesItemEditCtrl', ['$rootScope', '$scope', '$state', '$stateParams', 'SeriesModel', function ($rootScope, $scope, $state, $stateParams, SeriesModel) {
-        SeriesModel.get($stateParams.id).then( function (item) {
-            $scope.seriesItem = item;
-            $scope.original = angular.copy(item);
-        });
+
+        if ($stateParams.id != undefined) {
+            SeriesModel.get($stateParams.id).then(function (item) {
+                $scope.seriesItem = item;
+                $scope.original = angular.copy(item);
+            });
+        } else {
+            $scope.seriesItem = SeriesModel.new();
+            $scope.original = angular.copy($scope.seriesItem);
+        }
 
         $scope.cancel = function () {
             if ($scope.seriesItemForm.$dirty)
@@ -89,10 +264,12 @@ angular.module('series', ['resources.series'])
             if ($scope.seriesItemForm.$dirty)
                 angular.copy($scope.seriesItem, $scope.original);
             $scope.seriesItemForm.$setPristine(true);
-            $state.go('series.item.detail');
+            SeriesModel.save($scope.seriesItem).then(function (item) {
+                $state.go('series.item.detail', {id: item.id});
+            });
         };
 
-        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+        $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
             if ((fromState.name == 'series.item.edit') && ($scope.seriesItemForm.$dirty)) {
                 angular.copy($scope.original, $scope.seriesItem);
             }
