@@ -51,7 +51,7 @@ validator.service('validator', function(){
 });
 var appDev = angular.module('appDev', ['app', 'ngMockE2E']);
 appDev.run(function($httpBackend) {
-    var series = [{
+    series = [{
         id: 1,
         title: 'BlackSad',
         scriptwriter: 'Juan Diaz Canales',
