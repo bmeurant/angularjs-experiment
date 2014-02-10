@@ -28,14 +28,10 @@ describe('Comics App', function() {
         it('should display correctly seriesItem', function() {
             expect(element('.series-details h3').text()).toBe("BlackSad");
 
-            element('.series-details .series-desc dd').query(function ($el, done) {
-                sleep(1000); // headache ... special kassdedi to @loicfrering !!
-                expect($el.get(0).innerText).toBe('Juan Diaz Canales');
-                expect($el.get(1).innerText).toBe('Juanjo Guarnido');
-                expect($el.get(2).innerText).toBe('Dargaud');
-                expect($el.get(3).innerText).toBe('5');
-                done();
-            });
+            expect(element('.series-details .series-desc dd:eq(0)').text()).toBe('Juan Diaz Canales');
+            expect(element('.series-details .series-desc dd:eq(1)').text()).toBe('Juanjo Guarnido');
+            expect(element('.series-details .series-desc dd:eq(2)').text()).toBe('Dargaud');
+            expect(element('.series-details .series-desc dd:eq(3)').text()).toBe('5');
 
         });
     });
