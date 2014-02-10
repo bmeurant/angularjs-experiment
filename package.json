@@ -1,20 +1,21 @@
 {
-    "name": "angularjs-experiment",
-    "version": "0.0.1",
-    "description": "",
-    "main": "index.html",
-    "authors": [
-        "Baptiste Meurant <baptiste.meurant@gmail.com>"
-    ],
-    "license": "Apache V2",
-    "devDependencies": {
-        "grunt": "~0.4.2",
-        "grunt-contrib-less": "~0.9.0",
-        "grunt-contrib-connect": "~0.6.0",
-        "grunt-contrib-watch": "~0.5.3",
-        "grunt-contrib-copy": "~0.5.0",
-        "grunt-contrib-concat": "~0.3.0",
-        "grunt-html2js": "~0.1.0",
-        "grunt-karma": "~0.4.4"
-    }
+  "name": "angularjs-experiment",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.html",
+  "authors": [
+    "Baptiste Meurant <baptiste.meurant@gmail.com>"
+  ],
+  "license": "Apache V2",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-less": "~0.9.0",
+    "grunt-contrib-connect": "~0.6.0",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-contrib-copy": "~0.5.0",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-html2js": "~0.1.0",
+    "grunt-karma": "~0.6.2",
+    "qunitjs": "~1.12.0"
+  }
 }
