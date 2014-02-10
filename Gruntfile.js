@@ -42,6 +42,10 @@ module.exports = function (grunt) {
             unit: {
                 configFile: 'test/config/karma.conf.js',
                 background: false
+            },
+            e2e: {
+                configFile: 'test/config/karma-e2e.conf.js',
+                background: false
             }
         },
         connect: {
@@ -75,6 +79,10 @@ module.exports = function (grunt) {
             karma: {
                 files: ['app/**/*.js', 'test/unit/*.js'],
                 tasks: ['karma:unit:run']
+            },
+            karmae2e: {
+                files: ['app/**/*.js', 'test/e2e/*.js'],
+                tasks: ['karma:e2e']
             }
         },
         concat: {
@@ -108,4 +116,5 @@ module.exports = function (grunt) {
     grunt.registerTask('serve', ['connect', 'build', 'watch']);
     grunt.registerTask('default', ['serve']);
     grunt.registerTask('tests', ['build', 'karma:unit', 'watch']);
+    grunt.registerTask('e2e', ['build', 'karma:e2e', 'watch']);
 };

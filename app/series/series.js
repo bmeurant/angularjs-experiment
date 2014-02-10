@@ -147,8 +147,6 @@ angular.module('series', ['resources.series', 'resources.albums'])
     })
 
     .controller('seriesItemCtrl', ['$scope', '$state', '$stateParams', 'SeriesModel', function ($scope, $state, $stateParams, SeriesModel) {
-        debugger;
-
         SeriesModel.get($stateParams.id).then(function (item) {
             $scope.seriesItem = item;
         });
