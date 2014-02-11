@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ui.router', 'ngResource', 'templates.app', 'series', 'rhForm', 'validator', 'rhMoment', 'pascalprecht.translate', 'labels']);
+var app = angular.module('appRoot', ['ui.router', 'ngResource', 'templates.app', 'series', 'rhForm', 'validator', 'rhMoment', 'pascalprecht.translate', 'labels']);
 
 app.config(function ($stateProvider, $urlRouterProvider) {
     // For any unmatched url, redirect to /series

@@ -103,6 +103,8 @@ angular.module('series', ['resources.series', 'resources.albums'])
                     this.series.$promise.then(function (series) {
                         var obj = getById(series, seriesItem.id);
                         angular.copy(updated, obj);
+                        fillAlbums(obj);
+                        obj.validations = this.validations;
                         itemData.resolve(obj);
                     }.bind(this));
                 }.bind(this));
@@ -111,6 +113,7 @@ angular.module('series', ['resources.series', 'resources.albums'])
                     this.series.$promise.then(function (series) {
                         var obj = getById(series, seriesItem.id);
                         angular.copy(updated, obj);
+                        obj.validations = this.validations;
                         itemData.resolve(obj);
                     }.bind(this));
                 }.bind(this));
