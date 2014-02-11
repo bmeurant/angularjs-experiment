@@ -10,7 +10,7 @@
         <input id="title" name="title" type="text" ng-model="seriesItem.title" class="form-control"/>
         <span class="help-block"></span>
     </div>
-    <img ng-src="{{seriesItem.coverUrl}}" alt="Series's first album cover" class="cover img-responsive img-thumbnail"/>
+    <img ng-src="{{seriesItem.coverUrl || 'default.jpg'}}" alt="Series's first album cover" class="cover img-responsive img-thumbnail"/>
 
     <div class="series-desc">
         <div class="form-group">

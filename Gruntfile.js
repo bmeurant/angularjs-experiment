@@ -58,46 +58,30 @@ module.exports = function (grunt) {
         },
         watch: {
             scripts: {
-                files: ['app/**/*.js'],
+                files: ['app/**/*.js', 'app/**/*.html', 'app/stylesheets/*.less', 'static/**/*.*', 'index.html'],
                 tasks: ['build']
             },
-            templates: {
-                files: ['app/**/*.html'],
-                tasks: ['build']
-            },
-            styles: {
-                files: ['app/stylesheets/*.less'],
-                tasks: ['build']
-            },
-            static: {
-                files: ['static/**/*.*'],
-                tasks: ['build']
-            },
-            indexHTML: {
-                files: ['index.html'],
-                tasks: ['build']
-            },
-            karma: {
-                files: ['app/**/*.js', 'test/unit/*.js'],
+            tests: {
+                files: ['app/**/*.js', 'app/**/*.html', 'test/unit/*.js'],
                 tasks: ['karma:unit:run']
             },
-            karmae2e: {
-                files: ['app/**/*.js', 'test/e2e/*.js'],
+            e2e: {
+                files: ['app/**/*.js', 'app/**/*.html', 'test/e2e/*.js'],
                 tasks: ['karma:e2e']
             }
         },
         concat: {
             javascript: {
-                src: ['app/**/*.js', 'dist/templates/**/*.js', '!app/dev.js', '!app/prod.js'],
+                src: ['app/**/*.js', 'dist/templates/**/*.js', '!app/resources/**/*.js', '!app/dev.js', '!app/prod.js'],
                 dest: 'dist/application.js'
             },
             dev : {
-                src: ['app/dev.js'],
-                dest: 'dist/app.js'
+                src: ['app/dev.js', 'app/resources/dev/*.js'],
+                dest: 'dist/env.js'
             },
             prod: {
-                src: ['app/prod.js'],
-                dest: 'dist/app.js'
+                src: ['app/prod.js', 'app/resources/prod/*.js'],
+                dest: 'dist/env.js'
             }
         },
         html2js: {
@@ -122,8 +106,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-karma');
 
     grunt.registerTask('build', ['less:compile', 'html2js', 'copy', 'concat:javascript', 'concat:' + env]);
-    grunt.registerTask('serve', ['connect', 'build', 'watch']);
+    grunt.registerTask('serve', ['connect', 'build', 'watch:scripts']);
     grunt.registerTask('default', ['serve']);
-    grunt.registerTask('tests', ['build', 'karma:unit', 'watch']);
-    grunt.registerTask('e2e', ['build', 'karma:e2e', 'watch']);
+    grunt.registerTask('tests', ['build', 'karma:unit', 'watch:tests']);
+    grunt.registerTask('e2e', ['build', 'karma:e2e', 'watch:e2e']);
 };

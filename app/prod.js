@@ -1,0 +1,1 @@
+var appProd = angular.module('app', ['appRoot']);
