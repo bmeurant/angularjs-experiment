@@ -382,7 +382,7 @@ angular.module("series/series-detail.html", []).run(["$templateCache", function(
     "<div class=\"col-xs-12 col-md-5 series-details\">\n" +
     "    <button class=\"btn btn-default btn-icon edit\" ng-click=\"edit()\"><i class=\"fa fa-pencil\"></i></button>\n" +
     "    <h3>{{seriesItem.title}}</h3>\n" +
-    "    <img ng-src=\"/dist/static/images/series/covers/{{seriesItem.coverName}}\" alt=\"Series's first album cover\" class=\"cover img-responsive img-thumbnail\"/>\n" +
+    "    <img ng-src=\"dist/static/images/series/covers/{{seriesItem.coverName}}\" alt=\"Series's first album cover\" class=\"cover img-responsive img-thumbnail\"/>\n" +
     "    <dl class=\"series-desc dl-horizontal\">\n" +
     "        <dt>{{'seriesItem.scriptwriter' | translate}}</dt>\n" +
     "        <dd>{{seriesItem.scriptwriter}}</dd>\n" +
@@ -413,7 +413,7 @@ angular.module("series/series-edit.html", []).run(["$templateCache", function($t
     "        <input id=\"title\" name=\"title\" type=\"text\" ng-model=\"seriesItem.title\" class=\"form-control\"/>\n" +
     "        <span class=\"help-block\"></span>\n" +
     "    </div>\n" +
-    "    <img ng-src=\"/dist/static/images/series/covers/{{seriesItem.coverName || 'default.jpg'}}\" alt=\"Series's first album cover\" class=\"cover img-responsive img-thumbnail\"/>\n" +
+    "    <img ng-src=\"dist/static/images/series/covers/{{seriesItem.coverName || 'default.jpg'}}\" alt=\"Series's first album cover\" class=\"cover img-responsive img-thumbnail\"/>\n" +
     "\n" +
     "    <div class=\"series-desc\">\n" +
     "        <div class=\"form-group\">\n" +
@@ -461,7 +461,7 @@ angular.module("series/series-item.html", []).run(["$templateCache", function($t
     "<div class=\"col-xs-12 col-md-4 series-albums\">\n" +
     "    <ul>\n" +
     "        <li ng-repeat=\"album in seriesItem.albums\" class=\"row\">\n" +
-    "            <img ng-src=\"/dist/static/images/albums/covers/{{album.coverName}}\" alt=\"Album cover\" class=\"col-xs-2 cover img-responsive img-thumbnail\"/>\n" +
+    "            <img ng-src=\"dist/static/images/albums/covers/{{album.coverName}}\" alt=\"Album cover\" class=\"col-xs-2 cover img-responsive img-thumbnail\"/>\n" +
     "\n" +
     "            <div class=\"col-xs-10\">\n" +
     "                <h4>{{album.title}}</h4>\n" +
