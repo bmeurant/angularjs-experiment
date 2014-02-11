@@ -1,7 +1,8 @@
 module.exports = function (grunt) {
 
-    grunt.initConfig({
+    var env = grunt.option('env') || 'dev';
 
+    grunt.initConfig({
         less: {
             compile: {
                 options: {
@@ -87,8 +88,16 @@ module.exports = function (grunt) {
         },
         concat: {
             javascript: {
-                src: ['app/**/*.js', 'dist/templates/**/*.js'],
+                src: ['app/**/*.js', 'dist/templates/**/*.js', '!app/dev.js', '!app/prod.js'],
                 dest: 'dist/application.js'
+            },
+            dev : {
+                src: ['app/dev.js'],
+                dest: 'dist/app.js'
+            },
+            prod: {
+                src: ['app/prod.js'],
+                dest: 'dist/app.js'
             }
         },
         html2js: {
@@ -112,7 +121,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-html2js')
     grunt.loadNpmTasks('grunt-karma');
 
-    grunt.registerTask('build', ['less:compile', 'html2js', 'copy', 'concat']);
+    grunt.registerTask('build', ['less:compile', 'html2js', 'copy', 'concat:javascript', 'concat:' + env]);
     grunt.registerTask('serve', ['connect', 'build', 'watch']);
     grunt.registerTask('default', ['serve']);
     grunt.registerTask('tests', ['build', 'karma:unit', 'watch']);

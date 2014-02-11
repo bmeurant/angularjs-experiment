@@ -1,4 +1,4 @@
-var appDev = angular.module('appDev', ['app', 'ngMockE2E']);
+var appDev = angular.module('app', ['appRoot', 'ngMockE2E']);
 appDev.run(function($httpBackend) {
     var series = [{
         id: 1,
